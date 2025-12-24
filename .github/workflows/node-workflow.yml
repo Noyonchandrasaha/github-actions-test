@@ -1,0 +1,35 @@
+name: Project build workflow
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        # You can specify a specific version (e.g., 9.15.0) 
+        # or leave it at 9 to get the latest v9 release.
+        version: 9
+
+    - name: Set up Node.js 22.13.0
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.13.0
+        # Now that pnpm is installed, this cache setup will succeed
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      run: pnpm install
+
+    - name: Build
+      run: pnpm run build 
